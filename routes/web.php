@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::view('/', 'welcome')->name('home');
+
+Route::prefix('r')->group(function () {
+    Route::redirect('', '/');
+    Route::get('/{redirect:code}', 'RedirectController@redirect')->name('redirect');
 });
+
