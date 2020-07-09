@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\RedirectRequest;
+use App\Models\Redirect as RedirectModel;
 use Illuminate\Support\Facades\Redirect;
-use \App\Models\Redirect as RedirectModel;
 
 class RedirectController extends Controller
 {
+    /**
+     * Перенаправление
+     *
+     * @param RedirectModel $redirect
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function redirect(RedirectModel $redirect)
     {
+        // проверить условия срабатывания
+        // активность, даты, пароль
+
+        // перенаправление
         $url = $redirect->url;
 
         return Redirect::to($url);

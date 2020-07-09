@@ -16,7 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'welcome')->name('home');
 
 Route::prefix('r')->group(function () {
+    // без кода редиректим на главную
     Route::redirect('', '/');
-    Route::get('/{redirect:code}', 'RedirectController@redirect')->name('redirect');
+
+    // если в контроллере биндится модель, через ":" указывается поле модели,
+    // по которому идентифицировать данные в БД
+    Route::get('/{redirect:code}', 'RedirectController@redirect')
+        ->name('redirect')
+        ->middleware('analytics.collect');
 });
 

@@ -17,5 +17,16 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Redirect extends Model
 {
+    protected $connection = 'pgsql';
     protected $table = 'redirects';
+
+    /**
+     * Отношение один-ко-многим (статистика по переходам)
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function statistics()
+    {
+        return $this->hasMany(RedirectStatistics::class, 'redirect_id', 'id');
+    }
 }
