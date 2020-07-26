@@ -13,11 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'welcome')->name('home');
+// admin - зарезервированное слово, нельзя использовать к качестве кода для редиректа
+Route::prefix('admin')->group(function () {
+    Route::redirect("", "/");
+});
 
-Route::prefix('r')->group(function () {
-    // без кода редиректим на главную
-    Route::redirect('', '/');
+Route::redirect('/contacts', '/');
+Route::redirect('/about', '/');
+
+Route::prefix('/')->group(function () {
+    Route::view('', 'welcome')->name('home');
 
     // если в контроллере биндится модель, через ":" указывается поле модели,
     // по которому идентифицировать данные в БД
@@ -25,4 +30,3 @@ Route::prefix('r')->group(function () {
         ->name('redirect')
         ->middleware('analytics.collect');
 });
-

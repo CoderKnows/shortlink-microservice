@@ -25,4 +25,9 @@ class RedirectController extends Controller
 
         return Redirect::to($url);
     }
+
+    public function create(RedirectRequest $request)
+    {
+
+    }
 }
