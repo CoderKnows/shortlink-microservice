@@ -2,18 +2,22 @@
 
 namespace App\Exceptions;
 
+use CloudCreativity\LaravelJsonApi\Exceptions\HandlesErrors;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Neomerx\JsonApi\Exceptions\JsonApiException;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    use HandlesErrors;
+
     /**
      * A list of the exception types that are not reported.
      *
      * @var array
      */
     protected $dontReport = [
-        //
+        JsonApiException::class,
     ];
 
     /**
@@ -29,10 +33,10 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
+     * @param  Throwable  $exception
      * @return void
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function report(Throwable $exception)
     {
@@ -43,13 +47,33 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
+     * @param  Throwable  $exception
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function render($request, Throwable $exception)
     {
+        if ($this->isJsonApi($request, $exception)) {
+            return $this->renderJsonApi($request, $exception);
+        }
+
         return parent::render($request, $exception);
+    }
+
+    /**
+     * Переопределяем метод подготовки ответа при возникновении исключений
+     *
+     * @param Throwable $e
+     *
+     * @return \Symfony\Component\HttpKernel\Exception\HttpException|Throwable
+     */
+    protected function prepareException(Throwable $e)
+    {
+        if ($e instanceof JsonApiException) {
+            return $this->prepareJsonApiException($e);
+        }
+
+        return parent::prepareException($e);
     }
 }

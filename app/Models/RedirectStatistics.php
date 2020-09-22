@@ -20,6 +20,8 @@ class RedirectStatistics extends Model
     protected $connection = 'pgsql';
     protected $table = 'redirect_statistics';
 
+    protected $fillable = ['ip', 'referrer', 'redirect_id'];
+
     /**
      * Отношение много-к-одному (статистика переходов по ссылке)
      *

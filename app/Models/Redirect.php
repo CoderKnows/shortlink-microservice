@@ -20,12 +20,14 @@ class Redirect extends Model
     protected $connection = 'pgsql';
     protected $table = 'redirects';
 
+    protected $fillable = ['code', 'url'];
+
     /**
      * Отношение один-ко-многим (статистика по переходам)
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function statistics()
+    public function redirectStatistics()
     {
         return $this->hasMany(RedirectStatistics::class, 'redirect_id', 'id');
     }
